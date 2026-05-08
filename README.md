@@ -36,3 +36,7 @@ Example Output:
 
 Top Customer: SM-20320 → 25043.05  
 Top Product: TEC-CO-10004722 → 61599.82  
+
+## 📊 Dashboard Preview
+
+![Dashboard](dashboard.png)

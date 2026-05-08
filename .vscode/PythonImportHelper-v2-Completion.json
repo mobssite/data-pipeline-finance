@@ -1,0 +1,101 @@
+[
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "sqlite3",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sqlite3",
+        "description": "sqlite3",
+        "detail": "sqlite3",
+        "documentation": {}
+    },
+    {
+        "label": "df",
+        "kind": 5,
+        "importPath": "ingestion",
+        "description": "ingestion",
+        "peekOfCode": "df = pd.read_csv(\"data/train.csv\")\n# Convert date column\ndf['Order Date'] = pd.to_datetime(df['Order Date'], dayfirst=True)\n# Rename columns (important for clarity)\ndf = df.rename(columns={\n    'Order Date': 'date',\n    'Sales': 'sales',\n    'Customer ID': 'customer_id',\n    'Product ID': 'product_id'\n})",
+        "detail": "ingestion",
+        "documentation": {}
+    },
+    {
+        "label": "df",
+        "kind": 5,
+        "importPath": "ingestion",
+        "description": "ingestion",
+        "peekOfCode": "df = df.rename(columns={\n    'Order Date': 'date',\n    'Sales': 'sales',\n    'Customer ID': 'customer_id',\n    'Product ID': 'product_id'\n})\n# Drop missing values\ndf = df.dropna()\n# Create database\nconn = sqlite3.connect(\"finance.db\")",
+        "detail": "ingestion",
+        "documentation": {}
+    },
+    {
+        "label": "df",
+        "kind": 5,
+        "importPath": "ingestion",
+        "description": "ingestion",
+        "peekOfCode": "df = df.dropna()\n# Create database\nconn = sqlite3.connect(\"finance.db\")\n# Save cleaned data\ndf.to_sql(\"sales_raw\", conn, if_exists=\"replace\", index=False)\nprint(\"Data loaded successfully\")\ncursor = conn.cursor()\nquery = \"\"\"\nSELECT \n    strftime('%Y-%m', date) AS month,",
+        "detail": "ingestion",
+        "documentation": {}
+    },
+    {
+        "label": "conn",
+        "kind": 5,
+        "importPath": "ingestion",
+        "description": "ingestion",
+        "peekOfCode": "conn = sqlite3.connect(\"finance.db\")\n# Save cleaned data\ndf.to_sql(\"sales_raw\", conn, if_exists=\"replace\", index=False)\nprint(\"Data loaded successfully\")\ncursor = conn.cursor()\nquery = \"\"\"\nSELECT \n    strftime('%Y-%m', date) AS month,\n    SUM(sales) AS revenue\nFROM sales_raw",
+        "detail": "ingestion",
+        "documentation": {}
+    },
+    {
+        "label": "cursor",
+        "kind": 5,
+        "importPath": "ingestion",
+        "description": "ingestion",
+        "peekOfCode": "cursor = conn.cursor()\nquery = \"\"\"\nSELECT \n    strftime('%Y-%m', date) AS month,\n    SUM(sales) AS revenue\nFROM sales_raw\nGROUP BY month\nORDER BY month;\n\"\"\"\ncursor.execute(query)",
+        "detail": "ingestion",
+        "documentation": {}
+    },
+    {
+        "label": "query",
+        "kind": 5,
+        "importPath": "ingestion",
+        "description": "ingestion",
+        "peekOfCode": "query = \"\"\"\nSELECT \n    strftime('%Y-%m', date) AS month,\n    SUM(sales) AS revenue\nFROM sales_raw\nGROUP BY month\nORDER BY month;\n\"\"\"\ncursor.execute(query)\nresult = cursor.fetchall()",
+        "detail": "ingestion",
+        "documentation": {}
+    },
+    {
+        "label": "result",
+        "kind": 5,
+        "importPath": "ingestion",
+        "description": "ingestion",
+        "peekOfCode": "result = cursor.fetchall()\nprint(\"\\n📊 Revenue per month:\\n\")\nfor row in result:\n    month, revenue = row\n    print(f\"{month} : {round(revenue, 2)}\")\n    query = \"\"\"\nSELECT \n    customer_id,\n    SUM(sales) AS total_spent\nFROM sales_raw",
+        "detail": "ingestion",
+        "documentation": {}
+    },
+    {
+        "label": "result",
+        "kind": 5,
+        "importPath": "ingestion",
+        "description": "ingestion",
+        "peekOfCode": "result = cursor.fetchall()\nprint(\"\\n👥 Top 10 Clients:\\n\")\nfor row in result:\n    customer, revenue = row\n    print(f\"{customer} : {round(revenue, 2)}\")\n    query = \"\"\"\nSELECT \n    product_id,\n    SUM(sales) AS total_sales\nFROM sales_raw",
+        "detail": "ingestion",
+        "documentation": {}
+    },
+    {
+        "label": "result",
+        "kind": 5,
+        "importPath": "ingestion",
+        "description": "ingestion",
+        "peekOfCode": "result = cursor.fetchall()\nprint(\"\\n📦 Top 10 Products:\\n\")\nfor row in result:\n    product, revenue = row\n    print(f\"{product} : {round(revenue, 2)}\")",
+        "detail": "ingestion",
+        "documentation": {}
+    }
+]
